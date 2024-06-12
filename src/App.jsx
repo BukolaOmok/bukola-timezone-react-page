@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import TimeZoneDisplay from "./Date.jsx";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+function GetTimeOfDay(city) {
+  const timeZones = {
+    London: 0,
+    Nigeria: 1,
+    "New York": -4,
+    Tokyo: 9,
+  };
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const date = new Date();
+  const hours = date.getHours();
+  const mins = date.getMinutes();
+
+  const offset = timeZones[city];
+  let localHours = hours + offset;
+
+  if (localHours >= 24) {
+    localHours -= 24;
+  } else if (localHours < 0) {
+    localHours += 24;
+  }
+
+  const localTimeString = `${localHours.toString().padStart(2, "0")}:${mins
+    .toString()
+    .padStart(2, "0")}`;
+
+  return localTimeString;
 }
 
-export default App
+export default function App() {
+  const londonTime = GetTimeOfDay("London");
+  const nigeriaTime = GetTimeOfDay("Nigeria");
+  const newYorkTime = GetTimeOfDay("New York");
+  const tokyoTime = GetTimeOfDay("Tokyo");
+
+  return (
+    <div>
+      <h1>Some Global Time Zones:</h1>
+      <TimeZoneDisplay city="London" time={londonTime} />
+
+      <TimeZoneDisplay city="Nigeria" time={nigeriaTime} />
+
+      <TimeZoneDisplay city="New York" time={newYorkTime} />
+
+      <TimeZoneDisplay city="Tokyo" time={tokyoTime} />
+    </div>
+  );
+}
