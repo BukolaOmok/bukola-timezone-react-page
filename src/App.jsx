@@ -5,7 +5,7 @@ import "./App.css";
 function GetTimeOfDay(city) {
   const timeZones = {
     London: 0,
-    Nigeria: 1,
+    Nigeria: 0,
     "New York": -4,
     Tokyo: 9,
   };
